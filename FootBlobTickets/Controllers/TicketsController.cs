@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure.Storage.Blobs;
+using FootBlobTickets.Entities;
+using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -10,9 +13,26 @@ namespace FootBlobTickets.Controllers
 	{
 		// GET: api/<TicketsController>
 		[HttpGet]
-		public IEnumerable<string> Get()
+		public async Task<string> Get()
 		{
-			return new string[] { "value1", "value2" };
+			string connString = Environment.GetEnvironmentVariable("local") ?? "M.I.A";
+			string blobContent;
+
+			BlobServiceClient blobServiceClient = new BlobServiceClient(connString);
+			var blobContainerClient = blobServiceClient.GetBlobContainerClient("fixtures");
+			await blobContainerClient.CreateIfNotExistsAsync();
+
+			string blobName = "fixtures.txt";
+			var blobClient = blobContainerClient.GetBlobClient(blobName);
+
+			var response = await blobClient.DownloadAsync();
+
+			using (var streamReader = new StreamReader(response.Value.Content))
+			{
+				blobContent = await streamReader.ReadToEndAsync();
+			}
+
+			return blobContent;
 		}
 
 		// GET api/<TicketsController>/5
