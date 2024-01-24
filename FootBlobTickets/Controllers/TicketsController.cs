@@ -1,6 +1,7 @@
 ﻿using Azure.Storage.Blobs;
 using FootBlobTickets.Entities;
 using Microsoft.AspNetCore.Mvc;
+using System.Text;
 using System.Text.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -42,10 +43,24 @@ namespace FootBlobTickets.Controllers
 			return "value";
 		}
 
-		// POST api/<TicketsController>
+		// POST api/<TicketsController> Ta emot fixture Id och antal biljetter
 		[HttpPost]
-		public void Post([FromBody] string value)
+		public async Task Post([FromBody] Guid fixtureId, int numberOfTickets)
 		{
+            string connString = Environment.GetEnvironmentVariable("local") ?? "M.I.A";
+            BlobServiceClient blobServiceClient = new BlobServiceClient(connString);
+            var blobContainerClient = blobServiceClient.GetBlobContainerClient("sold-tickets");
+            await blobContainerClient.CreateIfNotExistsAsync();
+
+			string blobName = $"sold-tickets-{Guid.NewGuid()}";
+			string blobContent = JsonSerializer.Serialize($"No. of tickets: {numberOfTickets} - Fixture Id: {fixtureId}");
+
+			var blobClient = blobContainerClient.GetBlobClient(blobName);
+			byte[] bytes = Encoding.UTF8.GetBytes(blobContent);
+
+			using var stream = new MemoryStream(bytes);
+
+			await blobClient.UploadAsync(stream, overwrite: true);
 		}
 
 		// PUT api/<TicketsController>/5
