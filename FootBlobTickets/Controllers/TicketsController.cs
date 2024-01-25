@@ -1,4 +1,4 @@
-﻿using Azure.Storage.Blobs;
+using Azure.Storage.Blobs;
 using FootBlobTickets.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
