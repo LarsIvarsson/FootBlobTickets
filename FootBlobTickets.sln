@@ -5,6 +5,8 @@ VisualStudioVersion = 17.8.34511.84
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FootBlobTickets", "FootBlobTickets\FootBlobTickets.csproj", "{F86841FC-6B2E-422F-A4D8-1EF6380CE63B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "func-update-fixtures", "func-update-fixtures\func-update-fixtures.csproj", "{12C66011-E33E-45DB-88F5-A4800678431A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{F86841FC-6B2E-422F-A4D8-1EF6380CE63B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F86841FC-6B2E-422F-A4D8-1EF6380CE63B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F86841FC-6B2E-422F-A4D8-1EF6380CE63B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12C66011-E33E-45DB-88F5-A4800678431A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12C66011-E33E-45DB-88F5-A4800678431A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12C66011-E33E-45DB-88F5-A4800678431A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12C66011-E33E-45DB-88F5-A4800678431A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

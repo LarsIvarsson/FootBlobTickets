@@ -1,4 +1,4 @@
-﻿using Azure.Storage.Blobs;
+using Azure.Storage.Blobs;
 using FootBlobTickets.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
@@ -52,8 +52,13 @@ namespace FootBlobTickets.Controllers
             var blobContainerClient = blobServiceClient.GetBlobContainerClient("sold-tickets");
             await blobContainerClient.CreateIfNotExistsAsync();
 
-			string blobName = $"sold-tickets-{Guid.NewGuid()}.txt";
-			string blobContent = JsonSerializer.Serialize($"No. of tickets: {numberOfTickets} - Fixture Id: {fixtureId}");
+			string blobName = $"sold-tickets-{Guid.NewGuid()}";
+			string blobContent = JsonSerializer.Serialize(new
+			{
+				FixtureId = fixtureId,
+				NumberOfTickets	= numberOfTickets,
+				Email = "zeb@zeb.zeb"
+			});
 
 			var blobClient = blobContainerClient.GetBlobClient(blobName);
 			byte[] bytes = Encoding.UTF8.GetBytes(blobContent);
