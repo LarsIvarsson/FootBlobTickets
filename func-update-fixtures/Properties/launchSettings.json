@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "func_update_fixtures": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7017",
+      "launchBrowser": false
+    }
+  }
+}
