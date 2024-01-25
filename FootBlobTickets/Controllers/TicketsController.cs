@@ -52,7 +52,7 @@ namespace FootBlobTickets.Controllers
             var blobContainerClient = blobServiceClient.GetBlobContainerClient("sold-tickets");
             await blobContainerClient.CreateIfNotExistsAsync();
 
-			string blobName = $"sold-tickets-{Guid.NewGuid()}";
+			string blobName = $"sold-tickets-{Guid.NewGuid()}.txt";
 			string blobContent = JsonSerializer.Serialize($"No. of tickets: {numberOfTickets} - Fixture Id: {fixtureId}");
 
 			var blobClient = blobContainerClient.GetBlobClient(blobName);
