@@ -4,6 +4,8 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Azure.Identity;
+using Azure.Messaging.EventGrid;
 using Azure.Storage.Blobs;
 using FootBlobTickets.Entities;
 using Microsoft.Azure.Functions.Worker;
@@ -38,7 +40,7 @@ namespace func_update_fixtures
             Fixture? fixtureToUpdate = fixtures.FirstOrDefault(f => f.FixtureId == ticket.FixtureId);
             fixtureToUpdate.TicketsSold += ticket.NumberOfTickets;
 
-            string connString = Environment.GetEnvironmentVariable("local") ?? "Hi-hi";
+			string connString = Environment.GetEnvironmentVariable("local") ?? "Hi-hi";
 
 			BlobServiceClient blobServiceClient = new BlobServiceClient(connString);
 			var blobContainerClient = blobServiceClient.GetBlobContainerClient("fixtures");
@@ -54,6 +56,21 @@ namespace func_update_fixtures
 			using var streamToUpdate = new MemoryStream(bytes);
 
 			await blobClient.UploadAsync(streamToUpdate, overwrite: true);
+
+            string endpoint = "https://evgt-gladpack.ukwest-1.eventgrid.azure.net/api/events";
+
+            EventGridPublisherClient eventClient = new EventGridPublisherClient(new Uri(endpoint), new DefaultAzureCredential());
+
+			EventGridEvent egEvent =
+				new EventGridEvent(
+					"ExampleEventSubject",
+					"Example.EventType",
+					"1.0",
+					ticket
+					);
+
+			eventClient.SendEventAsync(egEvent).GetAwaiter().GetResult();
+			
 
 			return blobContent;
 
