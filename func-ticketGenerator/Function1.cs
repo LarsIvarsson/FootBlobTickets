@@ -18,9 +18,9 @@ namespace func_ticketGenerator
         }
 
         [Function(nameof(Function1))]
-        public void Run([EventGridTrigger] CloudEvent cloudEvent)
+        public void Run([EventGridTrigger] Azure.Messaging.EventGrid.EventGridEvent ev)
         {
-            _logger.LogInformation("Event type: {type}, Event subject: {subject}", cloudEvent.Type, cloudEvent.Subject);
+            _logger.LogInformation("Event type: {type}, Event subject: {subject}", ev.EventType, ev.Subject, ev.Data.ToString());
         }
     }
 }
