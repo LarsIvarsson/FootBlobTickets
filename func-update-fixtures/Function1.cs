@@ -48,7 +48,6 @@ namespace func_update_fixtures
 			string blobName = "fixtures.txt";
 			var blobClient = blobContainerClient.GetBlobClient(blobName);
 
-			//var fixturesResponse = await blobClient.DownloadAsync();
             var blobContent = JsonSerializer.Serialize(fixtures);
 
 			byte[] bytes = Encoding.UTF8.GetBytes(blobContent);
@@ -71,9 +70,7 @@ namespace func_update_fixtures
 
 			eventClient.SendEventAsync(egEvent).GetAwaiter().GetResult();
 			
-
 			return blobContent;
-
 		}
     }
 }
