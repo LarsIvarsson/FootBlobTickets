@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FootBlobTickets", "FootBlob
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "func-update-fixtures", "func-update-fixtures\func-update-fixtures.csproj", "{12C66011-E33E-45DB-88F5-A4800678431A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "func-ticketGenerator", "func-ticketGenerator\func-ticketGenerator.csproj", "{0DD670E8-99D2-4317-8283-347EBAC90F49}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "func-ticketGenerator", "func-ticketGenerator\func-ticketGenerator.csproj", "{0DD670E8-99D2-4317-8283-347EBAC90F49}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FootBlobSBFunc", "FootBlobSBFunc\FootBlobSBFunc.csproj", "{9E4B949C-E61E-4486-ACBE-7E21C4E406CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{0DD670E8-99D2-4317-8283-347EBAC90F49}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0DD670E8-99D2-4317-8283-347EBAC90F49}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0DD670E8-99D2-4317-8283-347EBAC90F49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E4B949C-E61E-4486-ACBE-7E21C4E406CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E4B949C-E61E-4486-ACBE-7E21C4E406CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E4B949C-E61E-4486-ACBE-7E21C4E406CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E4B949C-E61E-4486-ACBE-7E21C4E406CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

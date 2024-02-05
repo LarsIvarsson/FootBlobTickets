@@ -1,0 +1,8 @@
+{
+    "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+    "sbConnString": "Endpoint=sb://sb-gladpack.servicebus.windows.net/;SharedAccessKeyName=sas-listen;SharedAccessKey=pNy9uZ00oeZvTHfzAFlwoGooFSa/TXv0r+ASbIGBOho=;EntityPath=sbt-tickettopic"
+  }
+}
