@@ -40,7 +40,7 @@ namespace func_update_fixtures
             Fixture? fixtureToUpdate = fixtures.FirstOrDefault(f => f.FixtureId == ticket.FixtureId);
             fixtureToUpdate.TicketsSold += ticket.NumberOfTickets;
 
-			string connString = Environment.GetEnvironmentVariable("local") ?? "Hi-hi";
+			string connString = Environment.GetEnvironmentVariable("local") ?? "Connection String missing";
 
 			BlobServiceClient blobServiceClient = new BlobServiceClient(connString);
 			var blobContainerClient = blobServiceClient.GetBlobContainerClient("fixtures");
