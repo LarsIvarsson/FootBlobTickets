@@ -25,7 +25,7 @@ namespace func_ticketGenerator
             ServiceBusClient sbClient = new(connectionString);
             ServiceBusSender sender = sbClient.CreateSender(topicName);
 
-            string messageBody = $"Event: {ev.Data}";
+            string messageBody = $"{ev.Data}";
             ServiceBusMessage message = new ServiceBusMessage(messageBody);
             await sender.SendMessageAsync(message);
         }

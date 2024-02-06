@@ -3,6 +3,10 @@ using System.Threading.Tasks;
 using Azure.Messaging.ServiceBus;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
+using Microsoft.Azure.Cosmos;
+using FootBlobTickets.Entities;
+using System.Text.Json.Nodes;
+using Newtonsoft.Json;
 
 namespace FootBlobSBFunc
 {
@@ -27,6 +31,22 @@ namespace FootBlobSBFunc
 
              // Complete the message
             await messageActions.CompleteMessageAsync(message);
+
+			string cosmosEndpointUrl = "https://localhost:8081";
+			string cosmosPrimaryKey = "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==";
+
+            CosmosClient cosmosClient = new CosmosClient(cosmosEndpointUrl, cosmosPrimaryKey);
+            DatabaseResponse dbResponse = await cosmosClient.CreateDatabaseIfNotExistsAsync("footblobtickets-db");
+
+            Console.WriteLine($"Found or created db with id: {dbResponse.Database.Id}");
+
+            ContainerResponse cResponse = await dbResponse.Database.CreateContainerIfNotExistsAsync("tickets", "/FixtureId");
+            Console.WriteLine($"Found or created container with id: {cResponse.Container.Id}");
+
+            Ticket newTicket = message.Body.ToObjectFromJson<Ticket>();
+
+            ItemResponse<Ticket> iResponse = await cResponse.Container.CreateItemAsync(newTicket, new PartitionKey(newTicket.FixtureId.ToString()));
+            Console.WriteLine("We made it...!?");
         }
     }
 }
