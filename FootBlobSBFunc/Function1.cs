@@ -32,8 +32,8 @@ namespace FootBlobSBFunc
              // Complete the message
             await messageActions.CompleteMessageAsync(message);
 
-			string cosmosEndpointUrl = "https://localhost:8081";
-			string cosmosPrimaryKey = "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==";
+			string cosmosEndpointUrl = "https://gladpack-cosmosdb.documents.azure.com:443/";
+			string cosmosPrimaryKey = "r3cB3jT9GUcZLoDoZXmP93xJV6Ig33U25YM6OuyBwFbELwkkzn5iPYUomXnhYocdU3zo3wwXqfByACDbKx2z3g==";
 
             CosmosClient cosmosClient = new CosmosClient(cosmosEndpointUrl, cosmosPrimaryKey);
             DatabaseResponse dbResponse = await cosmosClient.CreateDatabaseIfNotExistsAsync("footblobtickets-db");
