@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "func-update-fixtures", "fun
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "func-ticketGenerator", "func-ticketGenerator\func-ticketGenerator.csproj", "{0DD670E8-99D2-4317-8283-347EBAC90F49}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FootBlobSBFunc", "FootBlobSBFunc\FootBlobSBFunc.csproj", "{9E4B949C-E61E-4486-ACBE-7E21C4E406CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FootBlobSBFunc", "FootBlobSBFunc\FootBlobSBFunc.csproj", "{9E4B949C-E61E-4486-ACBE-7E21C4E406CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
