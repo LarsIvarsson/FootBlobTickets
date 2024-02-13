@@ -12,53 +12,60 @@ namespace FootBlobTickets.Controllers
 	[ApiController]
 	public class TicketsController : ControllerBase
 	{
-		// GET: api/<TicketsController>
-		[HttpGet]
+        public string? BlobContent { get; set; }
+
+        // GET: api/<TicketsController>
+        [HttpGet]
 		public async Task<string> Get()
 		{
-			string connString = Environment.GetEnvironmentVariable("local") ?? "M.I.A";
-			string blobContent;
+			string? connString = Environment.GetEnvironmentVariable("local") ?? null;
 
-			BlobServiceClient blobServiceClient = new BlobServiceClient(connString);
-			var blobContainerClient = blobServiceClient.GetBlobContainerClient("fixtures");
-			await blobContainerClient.CreateIfNotExistsAsync();
-
-			string blobName = "fixtures.txt";
-			var blobClient = blobContainerClient.GetBlobClient(blobName);
-
-			var response = await blobClient.DownloadAsync();
-
-			using (var streamReader = new StreamReader(response.Value.Content))
+			if (connString is not null)
 			{
-				blobContent = await streamReader.ReadToEndAsync();
+				BlobServiceClient blobServiceClient = new BlobServiceClient(connString);
+				var blobContainerClient = blobServiceClient.GetBlobContainerClient("fixtures");
+				await blobContainerClient.CreateIfNotExistsAsync();
+
+				var blobClient = blobContainerClient.GetBlobClient("fixtures.txt");
+
+				var response = await blobClient.DownloadAsync();
+
+				using (var streamReader = new StreamReader(response.Value.Content))
+				{
+					BlobContent = await streamReader.ReadToEndAsync();
+					return BlobContent;
+				}
 			}
 
-			return blobContent;
+			throw new Exception("No fixtures found.");
 		}
 
 		// POST api/<TicketsController> Ta emot fixture Id och antal biljetter
 		[HttpPost]
-		public async Task Post([FromBody] Guid fixtureId, int numberOfTickets)
+		public async Task Post([FromBody] Ticket ticket)
 		{
-            string connString = Environment.GetEnvironmentVariable("local") ?? "M.I.A";
-            BlobServiceClient blobServiceClient = new BlobServiceClient(connString);
-            var blobContainerClient = blobServiceClient.GetBlobContainerClient("sold-tickets");
-            await blobContainerClient.CreateIfNotExistsAsync();
-
-			string blobName = $"sold-tickets-{Guid.NewGuid()}.txt";
-			string blobContent = JsonSerializer.Serialize(new
+            string? connString = Environment.GetEnvironmentVariable("local") ?? null;
+			
+			if (connString is not null)
 			{
-				FixtureId = fixtureId,
-				NumberOfTickets	= numberOfTickets,
-				Email = "zeb@zeb.zeb"
-			});
+				BlobServiceClient blobServiceClient = new BlobServiceClient(connString);
+				var blobContainerClient = blobServiceClient.GetBlobContainerClient("sold-tickets");
+				await blobContainerClient.CreateIfNotExistsAsync();
 
-			var blobClient = blobContainerClient.GetBlobClient(blobName);
-			byte[] bytes = Encoding.UTF8.GetBytes(blobContent);
+				string blobContent = JsonSerializer.Serialize(new
+				{
+					ticket.FixtureId,
+					ticket.NumberOfTickets,
+					ticket.Email
+				});
 
-			using var stream = new MemoryStream(bytes);
+				var blobClient = blobContainerClient.GetBlobClient($"sold-tickets-{Guid.NewGuid()}.txt");
+				byte[] bytes = Encoding.UTF8.GetBytes(blobContent);
 
-			await blobClient.UploadAsync(stream, overwrite: true);
+				using var stream = new MemoryStream(bytes);
+
+				await blobClient.UploadAsync(stream, overwrite: true);
+			}
 		}
 	}
 }
