@@ -1,9 +1,4 @@
-using System.IO;
 using System.Text;
-using System.Text.Json;
-using System.Text.Json.Nodes;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 using Azure.Identity;
 using Azure.Messaging.EventGrid;
 using Azure.Storage.Blobs;
@@ -11,7 +6,6 @@ using FootBlobTickets.Entities;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace func_update_fixtures
 {
@@ -25,52 +19,52 @@ namespace func_update_fixtures
         }
 
         [Function(nameof(Function1))]
-        public async Task<string> Run([BlobTrigger("sold-tickets/{name}", Connection = "local")] Stream stream, string name)
+        public async Task<string> Run([BlobTrigger("sold-tickets/{name}", Connection = "local")] Stream stream)
         {
+            // reading newly created ticket from blob storage, converting to ticket object
             using var blobStreamReader = new StreamReader(stream);
             var content = await blobStreamReader.ReadToEndAsync();
             Ticket? ticket = JsonConvert.DeserializeObject<Ticket>(content);
             
+            // sending get request to API, deserializing to list of fixtures
             HttpClient client = new HttpClient();
             var response = await client.GetAsync("https://app-gladpack-projekt.azurewebsites.net/api/Tickets");
-
             string jsonContent = await response.Content.ReadAsStringAsync();
             List<Fixture> fixtures = JsonConvert.DeserializeObject<List<Fixture>>(jsonContent);
 
+            // finding the matching fixture and updating TicketsSold property
             Fixture? fixtureToUpdate = fixtures.FirstOrDefault(f => f.FixtureId == ticket.FixtureId);
             fixtureToUpdate.TicketsSold += ticket.NumberOfTickets;
 
-			string connString = Environment.GetEnvironmentVariable("local") ?? "Connection String missing";
+			string? connString = Environment.GetEnvironmentVariable("local") ?? null;
 
-			BlobServiceClient blobServiceClient = new BlobServiceClient(connString);
-			var blobContainerClient = blobServiceClient.GetBlobContainerClient("fixtures");
+            if (connString is not null)
+            {
+			    BlobServiceClient blobServiceClient = new BlobServiceClient(connString);
+			    var blobContainerClient = blobServiceClient.GetBlobContainerClient("fixtures");
+			    
+			    var blobClient = blobContainerClient.GetBlobClient("fixtures.txt");
+                // serializing updated fixtures list
+                var blobContent = System.Text.Json.JsonSerializer.Serialize(fixtures);
+			    byte[] bytes = Encoding.UTF8.GetBytes(blobContent);
 
-			string blobName = "fixtures.txt";
-			var blobClient = blobContainerClient.GetBlobClient(blobName);
+                // uploading updated list to blob storage
+			    using var streamToUpdate = new MemoryStream(bytes);
+			    await blobClient.UploadAsync(streamToUpdate, overwrite: true);
 
-            var blobContent = JsonSerializer.Serialize(fixtures);
+                // publishing event to event grid
+                string endpoint = "https://evgt-gladpack.ukwest-1.eventgrid.azure.net/api/events";
+                EventGridPublisherClient eventClient = new EventGridPublisherClient(
+                    new Uri(endpoint),
+                    new DefaultAzureCredential());
 
-			byte[] bytes = Encoding.UTF8.GetBytes(blobContent);
+			    EventGridEvent egEvent =
+				    new EventGridEvent("Example.EventSubject", "Example.EventType","1.0", ticket);
 
-			using var streamToUpdate = new MemoryStream(bytes);
-
-			await blobClient.UploadAsync(streamToUpdate, overwrite: true);
-
-            string endpoint = "https://evgt-gladpack.ukwest-1.eventgrid.azure.net/api/events";
-
-            EventGridPublisherClient eventClient = new EventGridPublisherClient(new Uri(endpoint), new DefaultAzureCredential());
-
-			EventGridEvent egEvent =
-				new EventGridEvent(
-					"ExampleEventSubject",
-					"Example.EventType",
-					"1.0",
-					ticket
-					);
-
-			eventClient.SendEventAsync(egEvent).GetAwaiter().GetResult();
+			    eventClient.SendEventAsync(egEvent).GetAwaiter().GetResult();
 			
-			return blobContent;
+			    return blobContent;
+            }
 		}
     }
 }
