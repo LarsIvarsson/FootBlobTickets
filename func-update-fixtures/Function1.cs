@@ -65,6 +65,8 @@ namespace func_update_fixtures
 			
 			    return blobContent;
             }
+
+            throw new Exception("Something went wrong.");
 		}
     }
 }
