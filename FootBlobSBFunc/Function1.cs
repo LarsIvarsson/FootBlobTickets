@@ -21,7 +21,7 @@ namespace FootBlobSBFunc
 
         [Function(nameof(Function1))]
         public async Task Run(
-            [ServiceBusTrigger("sbt-tickettopic", "sbs-ticketSubscription", Connection = "sbConnString")]
+            [ServiceBusTrigger("sbt-tickettopic", "sbs-ticketSubscription", Connection = "local")]
             ServiceBusReceivedMessage message,
             ServiceBusMessageActions messageActions)
         {
