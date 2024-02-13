@@ -8,6 +8,5 @@
         public string Stadium { get; set; }
         public int StadiumCapacity { get; set; }
         public int TicketsSold { get; set; }
-        public DateTime Date { get; set; }
     }
 }

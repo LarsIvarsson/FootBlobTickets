@@ -19,7 +19,7 @@ namespace func_update_fixtures
         }
 
         [Function(nameof(Function1))]
-        public async Task<string> Run([BlobTrigger("sold-tickets/{name}", Connection = "local")] Stream stream)
+        public async Task<string> Run([BlobTrigger("sold-tickets/{name}", Connection = "local")] Stream stream, string name)
         {
             // reading newly created ticket from blob storage, converting to ticket object
             using var blobStreamReader = new StreamReader(stream);
