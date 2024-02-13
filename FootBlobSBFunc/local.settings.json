@@ -3,6 +3,7 @@
   "Values": {
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
-    "local": "Endpoint=sb://sb-gladpack.servicebus.windows.net/;SharedAccessKeyName=sas-listen;SharedAccessKey=pNy9uZ00oeZvTHfzAFlwoGooFSa/TXv0r+ASbIGBOho=;EntityPath=sbt-tickettopic"
+    "local": "Endpoint=sb://sb-gladpack.servicebus.windows.net/;SharedAccessKeyName=sas-listen;SharedAccessKey=pNy9uZ00oeZvTHfzAFlwoGooFSa/TXv0r+ASbIGBOho=;EntityPath=sbt-tickettopic",
+    "cosmos": "r3cB3jT9GUcZLoDoZXmP93xJV6Ig33U25YM6OuyBwFbELwkkzn5iPYUomXnhYocdU3zo3wwXqfByACDbKx2z3g=="
   }
 }

@@ -1,12 +1,8 @@
-using System;
-using System.Threading.Tasks;
 using Azure.Messaging.ServiceBus;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using Microsoft.Azure.Cosmos;
 using FootBlobTickets.Entities;
-using System.Text.Json.Nodes;
-using Newtonsoft.Json;
 
 namespace FootBlobSBFunc
 {
@@ -29,24 +25,25 @@ namespace FootBlobSBFunc
             _logger.LogInformation("Message Body: {body}", message.Body);
             _logger.LogInformation("Message Content-Type: {contentType}", message.ContentType);
 
-             // Complete the message
             await messageActions.CompleteMessageAsync(message);
 
 			string cosmosEndpointUrl = "https://gladpack-cosmosdb.documents.azure.com:443/";
-			string cosmosPrimaryKey = "r3cB3jT9GUcZLoDoZXmP93xJV6Ig33U25YM6OuyBwFbELwkkzn5iPYUomXnhYocdU3zo3wwXqfByACDbKx2z3g==";
+            string? cosmosPrimaryKey = Environment.GetEnvironmentVariable("cosmos") ?? null;
 
-            CosmosClient cosmosClient = new CosmosClient(cosmosEndpointUrl, cosmosPrimaryKey);
-            DatabaseResponse dbResponse = await cosmosClient.CreateDatabaseIfNotExistsAsync("footblobtickets-db");
+            if (cosmosPrimaryKey is not null)
+            {
+                CosmosClient cosmosClient = new CosmosClient(cosmosEndpointUrl, cosmosPrimaryKey);
+                DatabaseResponse dbResponse = await cosmosClient
+                    .CreateDatabaseIfNotExistsAsync("footblobtickets-db");
 
-            Console.WriteLine($"Found or created db with id: {dbResponse.Database.Id}");
+                ContainerResponse cResponse = await dbResponse.Database
+                    .CreateContainerIfNotExistsAsync("tickets", "/FixtureId");
 
-            ContainerResponse cResponse = await dbResponse.Database.CreateContainerIfNotExistsAsync("tickets", "/FixtureId");
-            Console.WriteLine($"Found or created container with id: {cResponse.Container.Id}");
+                Ticket newTicket = message.Body.ToObjectFromJson<Ticket>();
 
-            Ticket newTicket = message.Body.ToObjectFromJson<Ticket>();
-
-            ItemResponse<Ticket> iResponse = await cResponse.Container.CreateItemAsync(newTicket, new PartitionKey(newTicket.FixtureId.ToString()));
-            Console.WriteLine("We made it...!?");
+                ItemResponse<Ticket> iResponse = await cResponse.Container
+                    .CreateItemAsync(newTicket, new PartitionKey(newTicket.FixtureId.ToString()));
+            }
         }
     }
 }
