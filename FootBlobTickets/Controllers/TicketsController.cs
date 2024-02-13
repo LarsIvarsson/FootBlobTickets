@@ -36,13 +36,6 @@ namespace FootBlobTickets.Controllers
 			return blobContent;
 		}
 
-		// GET api/<TicketsController>/5
-		[HttpGet("{id}")]
-		public string Get(int id)
-		{
-			return "value";
-		}
-
 		// POST api/<TicketsController> Ta emot fixture Id och antal biljetter
 		[HttpPost]
 		public async Task Post([FromBody] Guid fixtureId, int numberOfTickets)
@@ -66,18 +59,6 @@ namespace FootBlobTickets.Controllers
 			using var stream = new MemoryStream(bytes);
 
 			await blobClient.UploadAsync(stream, overwrite: true);
-		}
-
-		// PUT api/<TicketsController>/5
-		[HttpPut("{id}")]
-		public void Put(int id, [FromBody] string value)
-		{
-		}
-
-		// DELETE api/<TicketsController>/5
-		[HttpDelete("{id}")]
-		public void Delete(int id)
-		{
 		}
 	}
 }
