@@ -1,5 +1,4 @@
 using Azure.Messaging.ServiceBus;
-using Azure.Messaging.EventGrid;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 
@@ -15,7 +14,7 @@ namespace func_ticketGenerator
         }
 
         [Function(nameof(Function1))]
-        public async Task Run([EventGridTrigger] EventGridEvent ev)
+        public async Task Run([EventGridTrigger] Azure.Messaging.EventGrid.EventGridEvent ev)
         {
             _logger.LogInformation("Event: {Content}", ev.Data.ToString());
 
