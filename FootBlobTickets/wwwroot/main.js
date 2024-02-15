@@ -11,7 +11,7 @@ const postTickets = async (event) => {
     event.preventDefault();
     const url = "https://app-gladpack-projekt.azurewebsites.net/api/Tickets";
 
-    if (ValidateEmail(email.value)) {
+    if (ValidateEmail(email.value) && ValidateSelectedFixture(selectedFixtureId)) {
         const body = {
             fixtureId: selectedFixtureId,
             numberOfTickets: selectElement.value,
@@ -110,6 +110,15 @@ function ValidateEmail(input) {
     } else {
         alert("Invalid email address!");
         email.focus();
+        return false;
+    }
+}
+
+function ValidateSelectedFixture(input) {
+    if (input) {
+        return true;
+    } else {
+        alert("No fixture selected!");
         return false;
     }
 }
