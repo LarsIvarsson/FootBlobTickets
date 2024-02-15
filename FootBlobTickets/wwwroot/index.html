@@ -1,23 +1,48 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Foot Blob Tickets</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Protest+Strike&display=swap"
+          rel="stylesheet" />
+    <title>FootBlobTickets</title>
 </head>
-<body style="background-color: blanchedalmond;">
-    <ul id="fixturesList" style="list-style: none;"></ul>
 
-    <label for="tickets">Number of tickets: </label>
-    <select name="tickets" id="tickets">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-    </select>
+<header>
+    <div class="flex-header">
+        <div>
+            <img src="/images/fbt_logo.jpeg"
+                 alt="FootBlobTickets logo"
+                 class="img-logo" />
+        </div>
+        <a href="" class="text-logo">FootBlobTickets</a>
+    </div>
+</header>
+<span id="fixturesList"></span>
 
-    <button id="postButton">Buy ticket(s)</button>
+<body style="background-color: #fff6e9">
+    <div class="buy-info">
+        <form class="checkOut-display">
+            <label for="email">Enter your email:</label>
+            <input type="email" id="email" name="email" />
 
+            <label for="tickets">Number of tickets: </label>
+            <select id="numberSelect" name="tickets"></select>
+
+            <button type="button" class="btn-buy" id="postButton">
+                Buy ticket(s)
+            </button>
+        </form>
+        <p id="matchSelected" class="centered-text">No match selected</p>
+    </div>
     <script src="main.js"></script>
 </body>
 </html>
