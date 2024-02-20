@@ -16,8 +16,7 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "local": "DefaultEndpointsProtocol=https;AccountName=rggladpackprojekta86c;AccountKey=U3wvIxw+PfVU7FlF/U6yKGJRDoaOdBWacBSe0J0Kw3znU3THTqGn86Xuam+DhVvzWdXIUXAcapuv+AStwKoY8Q==;BlobEndpoint=https://rggladpackprojekta86c.blob.core.windows.net/;QueueEndpoint=https://rggladpackprojekta86c.queue.core.windows.net/;TableEndpoint=https://rggladpackprojekta86c.table.core.windows.net/;FileEndpoint=https://rggladpackprojekta86c.file.core.windows.net/;"
-      },
+        },
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:7085;http://localhost:5017"
     },
